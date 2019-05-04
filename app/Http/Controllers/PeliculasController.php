@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+//use \App\peliculas; 
 
 class PeliculasController extends Controller
 {
@@ -12,9 +13,16 @@ class PeliculasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return "hello peliculas controller"; 
-    }
+	{
+		$peliculas = \App\peliculas::all();
+		
+		return view('viewPeliculas', ['peliculas' =>$peliculas,'name'=>'PELICULAS']);
+		
+		/* foreach($peliculas as $pelicula){
+			echo "nombre: ".$pelicula->nombre."   Descripcion: ".$pelicula->descripcion."   Fecha_inicio: ".$pelicula->fecha_inicio." <br>";	
+		} */
+	
+	}
 
     /**
      * Show the form for creating a new resource.
@@ -23,7 +31,7 @@ class PeliculasController extends Controller
      */
     public function create()
     {
-        //
+         return view('createPeliculas');
     }
 
     /**
@@ -34,7 +42,19 @@ class PeliculasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+		echo "store";
+		$pelicula =new \App\peliculas;
+		$pelicula->nombre =$request->nombre;
+		$pelicula->descripcion=$request->descripcion;
+		$pelicula->fecha_inicio=$request->fecha_inicio;
+		
+		if($pelicula->save()){
+			echo "pelicula guardada";
+			return redirect('/peliculas');
+		}else{
+			echo "Error al guardar pelicula";
+		} 
+		
     }
 
     /**
